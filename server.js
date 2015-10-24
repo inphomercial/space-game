@@ -9,7 +9,7 @@ var socket_io = require('socket.io');
 
 var http = require('http');
 var wildcard = require('socketio-wildcard');
-
+var guid = require('guid');
 
 var log_http = debug('server:http');
 var log_socket = debug('server:socket');
@@ -20,11 +20,6 @@ var forward_all = wildcard();
 var server_http = new http.Server(app);
 var server_socket = socket_io(server_http);
 
-var stats = {
-    active: 0,
-    total: 0
-};
-
 server_socket.use(forward_all);
 app.set('views', __dirname + '/views/');
 app.set('view engine', 'html');
@@ -34,13 +29,20 @@ app.use('/node_modules', express.static('node_modules'));
 app.use('/vendor', express.static('vendor'));
 app.use('/src', express.static('src'));
 app.get('/', function (req, res) { res.sendfile('client.html'); });
-app.get('/stats', function (req, res) { res.json(stats); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    stats.active++;
-    stats.total++;
+    socket.__guid = guid.raw();
 
-    socket.on('*', function (payload) { socket.broadcast.emit(payload.data[0], payload.data[1]); })
-    socket.on('disconnect', function () { stats.active--; });
+    socket.on('*', function (payload) {
+        socket.broadcast.emit(payload.data[0], payload.data[1]);
+    });
+
+    socket.on('game:join', function () {
+        socket.broadcast.emit('game:player:joined', socket.__guid);
+    });
+
+    socket.on('disconnect', function () {
+        socket.broadcast.emit('game:player:left', socket.__guid);
+    });
 });
