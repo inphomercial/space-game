@@ -42,14 +42,10 @@ app.get('/monitor', function (req, res) { res.sendfile('monitor.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    var player, pindex;
+    var player;
 
     if (game.canAddPlayer()) {
         player = game.addPlayer(socket);
-        pindex = game.players.indexOf(player);
-
-        player.props.x = game.map.start_location[pindex][0];
-        player.props.y = game.map.start_location[pindex][1];
 
         socket.on('disconnect', function () {
             if (player) {

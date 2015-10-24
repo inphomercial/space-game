@@ -64,12 +64,20 @@ function Game(map) {
  * @return {Player}
  */
 Game.prototype.addPlayer = function (socket) {
-    var player = new Player(socket, new PlayerProperties({
+    var player, pindex, loc;
+
+    player = new Player(socket, new PlayerProperties({
         id: socket.id,
         color: this.playerColors.shift()
     }));
 
     this.players.push(player);
+    pindex = this.players.indexOf(player);
+    loc = this.map.start_location.shift();
+
+    player.props.x = loc[0];
+    player.props.y = loc[1];
+
     return player;
 };
 
@@ -78,6 +86,7 @@ Game.prototype.addPlayer = function (socket) {
  */
 Game.prototype.removePlayer = function (player) {
     this.playerColors.push(player.props.color);
+    this.map.start_location.push([ player.props.x, player.props.y ]);
     lodash.pull(this.players, player);
 };
 
@@ -85,7 +94,7 @@ Game.prototype.removePlayer = function (player) {
  * @return {Boolean}
  */
 Game.prototype.canAddPlayer = function () {
-    return this.players.length < this.map.start_location.length;
+    return !!this.map.start_location.length;
 };
 
 Game.prototype.getState = function () {
