@@ -28,7 +28,8 @@ function draw() {
         socket.emit('player:turn', { rotation_speed: rotation_speed });
     }
 
-    socket.emit('player:boost', { boost_on : touchIsDown });
+    var boost_status = touchIsDown || mouseIsPressed;
+    socket.emit('player:boost', { boost_on : boost_status });
 }
 
 function asController() {
