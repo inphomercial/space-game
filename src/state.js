@@ -30,24 +30,23 @@ function Player(socket, props) {
 }
 
 
-Player.prototype.update = function() {
-    angleMode(RADIANS);
+Player.prototype.update = function(game) {
     if(this.boost) {
-        this.vx += game.boost_speed * Math.cos(this.rotation);
-        this.vy += game.boost_speed * Math.sin(this.rotation);
+        this.props.vx += game.boost_speed * Math.cos(this.props.rotation);
+        this.props.vy += game.boost_speed * Math.sin(this.props.rotation);
     }
 
     // Bounce off the walls
-    if( this.x + this.vx > width || this.x + this.vx < 0){
-        this.vx *= -1;
+    if( this.props.x + this.props.vx > width || this.props.x + this.props.vx < 0){
+        this.props.vx *= -1;
     }
-    if( this.y + this.vy > height || this.y + this.vy < 0){
-        this.vy *= -1;
+    if( this.props.y + this.props.vy > height || this.props.y + this.props.vy < 0){
+        this.props.vy *= -1;
     }
 
-    this.x += this.vx;
-    this.y += this.vy;
-    this.rotation += this.rotation_speed;
+    this.props.x += this.props.vx;
+    this.props.y += this.props.vy;
+    this.props.rotation += this.props.rotation_speed;
 }
 
 /**
