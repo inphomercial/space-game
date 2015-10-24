@@ -29,7 +29,7 @@ function setup() {
     });
 
     socket.on('game:state', function(_game_state){
-        console.log('ships: ' + game_state);
+        console.log('ships: ' + JSON.stringify(game_state.players, null, '  '));
         game_state = _game_state;
     });
 
@@ -60,7 +60,7 @@ function draw() {
 }
 
 function Star(x, y, color, size) {
-    console.log(color);
+    // console.log(color);
     this.x = x;
     this.y = y;
     this.color = color;

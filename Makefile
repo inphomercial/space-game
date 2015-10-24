@@ -6,4 +6,4 @@ install:
 	git submodule update --init
 
 run:
-	DEBUG=* node server
+	node server

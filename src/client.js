@@ -24,7 +24,7 @@ function windowResized() {
 
 function draw() {
     var turn = {
-        rotation_speed: (pRotationZ - rotationZ) * 0.0174533,
+        rotation_speed: rotationX * -1 * 0.0174533 / 5,
         boost: touchIsDown || mouseIsPressed
     };
 
@@ -34,6 +34,9 @@ function draw() {
     textSize(32);
     text("boost: " + JSON.stringify(turn.boost), 0, 130);
     text("rotation_speed: " + JSON.stringify(turn.rotation_speed), 0, 160);
+    text("X: " + JSON.stringify(rotationX), 0, 190);
+    text("Y: " + JSON.stringify(rotationY), 0, 220);
+    text("Z: " + JSON.stringify(rotationZ), 0, 250);
 }
 
 function asController() {

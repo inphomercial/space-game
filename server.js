@@ -1,5 +1,6 @@
 'use strict';
 
+var FPS = 60;
 var PORT = process.env.PORT || 3000;
 var DEBUG = process.env.DEBUG || process.env.NODE_ENV === 'development';
 
@@ -83,6 +84,6 @@ server_socket.on('connection', function (socket) {
 
         setInterval(function () {
             socket.emit('game:state', game.getState());
-        }, 1000);
+        }, 1000 / FPS);
     });
 });
