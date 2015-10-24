@@ -37,6 +37,7 @@ app.use('/node_modules', express.static('node_modules'));
 app.use('/vendor', express.static('vendor'));
 app.use('/src', express.static('src'));
 app.get('/', function (req, res) { res.sendfile('client.html'); });
+app.get('/monitor', function (req, res) { res.sendfile('monitor.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
