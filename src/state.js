@@ -31,6 +31,8 @@ function Player(socket, props) {
 
 
 Player.prototype.update = function(game) {
+    var mag;
+
     if(this.props.boost) {
         this.props.vx += game.boost_speed * Math.cos(this.props.rotation);
         this.props.vy += game.boost_speed * Math.sin(this.props.rotation);
@@ -44,8 +46,17 @@ Player.prototype.update = function(game) {
         this.props.vy *= -1;
     }
 
+    var max_speed = 6;
+    mag = Math.sqrt(Math.pow(this.props.vx, 2) + Math.pow(this.props.vy, 2));
+    // console.log('mag: ', mag);
+    if (mag > max_speed) {
+        this.props.vx = (this.props.vx / mag) * max_speed;
+        this.props.vy = (this.props.vy / mag) * max_speed;
+    }
+
     this.props.x += this.props.vx;
     this.props.y += this.props.vy;
+    // console.log(this.props);
     this.props.rotation += this.props.rotation_speed;
 }
 
