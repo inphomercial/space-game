@@ -1,11 +1,24 @@
 var socket = io();
 
-
-var ships = [],
 stars = [];
 var game_state;
 
+var ship_images;
+
 function setup() {
+    ship_images = {
+        'red' : loadImage('assets/ship-body-1.png'),
+        'blue' : loadImage('assets/ship-body-1.png'),
+        'orange' : loadImage('assets/ship-body-1.png'),
+        'purple' : loadImage('assets/ship-body-1.png'),
+        'pink' : loadImage('assets/ship-body-1.png'),
+        'yellow' : loadImage('assets/ship-body-1.png'),
+        'brown' : loadImage('assets/ship-body-1.png'),
+        'cornsilk' : loadImage('assets/ship-body-1.png'),
+        'paleturquoise' : loadImage('assets/ship-body-1.png'),
+        'violet' : loadImage('assets/ship-body-1.png')
+    }
+
     socket.emit('game:control');
 
     socket.on('pregame', function( countdown ){
@@ -37,6 +50,7 @@ function setup() {
     socket.on('game:state', function(_game_state){
         console.log('ships: ' + game_state);
         game_state = _game_state;
+        debugger;
         draw_game();
     });
 
@@ -91,11 +105,11 @@ function drawStarField(num) {
 function draw_game() {
     // background('CURRENT MAP');
     imageMode(CENTER);
-    ships.forEach( function (ship) {
+    game_state.players.forEach( function (ship) {
         push();
         translate(ship.x, ship.y);
         rotate(ship.r);
-        image(ship.image,0,0);
+        image(ship_images[ship.color],0,0);
         pop();
     });
 }
