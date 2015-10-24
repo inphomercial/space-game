@@ -6,7 +6,7 @@ var game_state = {},
     game_props = {},
     stars = [],
     shooting_stars = [],
-    ship_images
+    ship_images,
     flames;
 
 function setup() {
