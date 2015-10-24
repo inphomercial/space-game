@@ -36,11 +36,17 @@ app.get('/', function (req, res) { res.sendfile('client.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    var player = game.addPlayer(socket);
+    var player;
 
-    socket.on('disconnect', function () {
-        game.removePlayer(player);
-    });
+    if (game.canAddPlayer()) {
+        player = game.addPlayer(socket);
 
-    socket.emit('player:props', player.props);
+        socket.on('disconnect', function () {
+            game.removePlayer(player);
+        });
+
+        socket.emit('player:props', player.props);
+    } else {
+        socket.emit('player:better-luck-next-time');
+    }
 });
