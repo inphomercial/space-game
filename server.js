@@ -22,7 +22,7 @@ var server_socket = socket_io(server_http);
 var Game = require('./src/state');
 var game = new Game({
     maxPlayers: 10
-});
+}, /* Dean: placeholder map */ { points: [1, 2, 3, 4] });
 
 function pickOne(primary, backup, property) {
     return property in primary ? primary[property] : backup[property];
@@ -47,7 +47,9 @@ server_socket.on('connection', function (socket) {
         player = game.addPlayer(socket);
 
         socket.on('disconnect', function () {
-            game.removePlayer(player);
+            if (player) {
+                game.removePlayer(player);
+            }
         });
 
         socket.on('player:turn', function (props) {
@@ -71,6 +73,10 @@ server_socket.on('connection', function (socket) {
             player.props = undefined;
             player = undefined;
         }
+
+        socket.emit('game:props', {
+            map: game.map
+        });
 
         setInterval(function () {
             socket.emit('game:state', game.getState());

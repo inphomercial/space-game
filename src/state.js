@@ -37,8 +37,10 @@ function Player(socket, props) {
 
 /**
  * @constructor
+ * @param {Object} config
+ * @param {Map} map
  */
-function Game(config) {
+function Game(config, map) {
     /**
      * tracks available colors
      */
@@ -64,6 +66,11 @@ function Game(config) {
      * @type {GameConfiguration}
      */
     this.config = new GameConfiguration(config);
+
+    /**
+     * @type {Map}
+     */
+    this.map = map;
 }
 
 /**

@@ -32,8 +32,8 @@ function draw() {
     socket.emit('player:turn', turn);
 
     textSize(32);
-    text("boost: " + JSON.stringify(turn.boost), 10, 130);
-    text("rotation_speed: " + JSON.stringify(turn.rotation_speed), 10, 160);
+    text("boost: " + JSON.stringify(turn.boost), 0, 130);
+    text("rotation_speed: " + JSON.stringify(turn.rotation_speed), 0, 160);
 }
 
 function asController() {

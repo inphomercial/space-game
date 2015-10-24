@@ -1,9 +1,10 @@
 var socket = io();
 
 var game_state,
-stars = [],
-shooting_stars = [],
-ship_images;
+    map,
+    stars = [],
+    shooting_stars = [],
+    ship_images;
 
 function setup() {
     ship_images = {
@@ -21,30 +22,8 @@ function setup() {
 
     socket.emit('game:control');
 
-    socket.on('pregame', function( countdown ){
-        background(100); // Clears Background
-        textAlign(CENTER);
-        noStroke();
-        textStyle(ITALIC)
-        textSize(30);
-        text("JOIN THE NEXT ROUND", width/2, height/2 - 100);
-        text("POINT YOUR MOBILE BROWSER TO:", width/2, height/2 - 50);
-        textSize(50);
-        text("192.168.1.6", width/2, height/2);
-        textSize(70);
-        text(countdown, width/2, height/2 + 70);
-    });
-
-    socket.on('postgame', function( winner ){
-        background(100); // Clears Background
-        textAlign(CENTER);
-        noStroke();
-        textStyle(ITALIC)
-        textSize(30);
-        text("GAME OVER", width/2, height/2 - 50);
-        textSize(50);
-        text(winner + " WINS!", width/2, height/2);
-        textSize(70);
+    socket.on('game:props', function(game_props){
+        map = game_props.map;
     });
 
     socket.on('game:state', function(_game_state){
