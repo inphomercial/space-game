@@ -1,0 +1,3 @@
+[submodule "vendor/p5-play"]
+	path = vendor/p5-play
+	url = https://github.com/molleindustria/p5.play.git
