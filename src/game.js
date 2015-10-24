@@ -6,9 +6,12 @@ var game_state = {},
     game_props = {},
     stars = [],
     shooting_stars = [],
-    ship_images;
+    ship_images
+    flames;
 
 function setup() {
+    flames = loadAnimation("assets/ship-flame-1.png", "assets/ship-flame-4.png");
+
     ship_images = {
         'red' : loadImage('assets/ship-body-1.png'),
         'blue' : loadImage('assets/ship-body-1.png'),
@@ -132,6 +135,7 @@ function draw_game() {
         translate(ship.x, ship.y);
         rotate(ship.rotation);
         image(ship_images[ship.color],0,0);
+        animation(flame, 0, -21);
         pop();
     });
 }
