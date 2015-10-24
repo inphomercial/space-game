@@ -1,20 +1,25 @@
 'use strict';
 
 var socket;
-
-var bg = color(255);
+var bg;
 
 function setup() {
     socket = io();
+
     createCanvas(windowWidth, windowHeight);
+    socket.on('player:props', function (props) {
+        bg = props.color;
+    });
 }
 
 function draw() {
-    background(bg);
+    if (bg) {
+        background(bg);
+    }
+
     var rotation_speed = pRotationZ - rotationZ;
 
     if (rotation_speed != 0) {
         socket.emit('turn', rotation_speed);
     }
-
-socket.on('color', funtion(d) { color = color(d);});
+}

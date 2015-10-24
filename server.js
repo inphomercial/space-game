@@ -19,6 +19,11 @@ var forward_all = wildcard();
 var server_http = new http.Server(app);
 var server_socket = socket_io(server_http);
 
+var Game = require('./src/state');
+var game = new Game({
+    maxPlayers: 10
+});
+
 server_socket.use(forward_all);
 app.set('views', __dirname + '/views/');
 app.set('view engine', 'html');
@@ -31,16 +36,11 @@ app.get('/', function (req, res) { res.sendfile('client.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    // socket.on('*', function (payload) {
-    //     socket.broadcast.emit(payload.data[0], payload.data[1]);
-    // });
-    //
-    // socket.on('game:join', function () {
-    //     socket.broadcast.emit('game:player:joined', socket.id);
-    // });
-    //
-    // socket.on('disconnect', function () {
-    //     socket.broadcast.emit('game:player:left', socket.id);
-    // });
-    socket.on('turn', function (d) { console.log(d); });
+    var player = game.addPlayer(socket);
+
+    socket.on('disconnect', function () {
+        game.removePlayer(player);
+    });
+
+    socket.emit('player:props', player.props);
 });
