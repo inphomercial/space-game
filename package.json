@@ -1,0 +1,28 @@
+{
+  "name": "space-game",
+  "version": "1.0.0",
+  "description": "Mindfarm Hackathon Oct 23 2015 (Space Game)",
+  "main": "p5.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/inphomercial/space-game.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/inphomercial/space-game/issues"
+  },
+  "homepage": "https://github.com/inphomercial/space-game",
+  "dependencies": {
+    "debug": "^2.2.0",
+    "express": "^4.13.3",
+    "normalize.css": "^3.0.3",
+    "p5": "^0.4.17",
+    "socket.io": "^1.3.7",
+    "socket.io-client": "^1.3.7",
+    "socketio-wildcard": "^0.1.1"
+  }
+}
