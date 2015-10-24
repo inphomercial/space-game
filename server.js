@@ -49,7 +49,7 @@ server_socket.on('connection', function (socket) {
             game.removePlayer(player);
         });
 
-        socket.on('turn', function (props) {
+        socket.on('player:turn', function (props) {
             player.props.boost = pickOne(props, player.props, 'boost');
             player.props.rotation_speed = pickOne(props, player.props, 'rotation_speed');
             player.props.vx = pickOne(props, player.props, 'vx');
