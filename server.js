@@ -24,6 +24,10 @@ var game = new Game({
     maxPlayers: 10
 });
 
+function pickOne(primary, backup, property) {
+    return property in primary ? primary[property] : backup[property];
+}
+
 server_socket.use(forward_all);
 app.set('views', __dirname + '/views/');
 app.set('view engine', 'html');
@@ -43,6 +47,15 @@ server_socket.on('connection', function (socket) {
 
         socket.on('disconnect', function () {
             game.removePlayer(player);
+        });
+
+        socket.on('turn', function (props) {
+            player.props.boost = pickOne(props, player.props, 'boost');
+            player.props.rotation_speed = pickOne(props, player.props, 'rotation_speed');
+            player.props.vx = pickOne(props, player.props, 'vx');
+            player.props.vy = pickOne(props, player.props, 'vy');
+            player.props.x = pickOne(props, player.props, 'x');
+            player.props.y = pickOne(props, player.props, 'y');
         });
 
         socket.emit('player:props', player.props);

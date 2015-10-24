@@ -27,6 +27,12 @@ function GameConfiguration(props) {
  */
 function PlayerProperties(props) {
     this.color = props.color;
+    this.boost = props.boost;
+    this.rotation_speed = props.rotation_speed;
+    this.vx = props.vx;
+    this.vy = props.vy;
+    this.x = props.x;
+    this.y = props.y;
 }
 
 /**
