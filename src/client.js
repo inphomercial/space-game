@@ -24,7 +24,7 @@ function windowResized() {
 
 function draw() {
     var turn = {
-        rotation_speed: pRotationZ - rotationZ,
+        rotation_speed: (pRotationZ - rotationZ) * 0.0174533,
         boost: touchIsDown || mouseIsPressed
     };
 
