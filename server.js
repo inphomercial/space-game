@@ -22,9 +22,7 @@ var server_socket = socket_io(server_http);
 var Game = require('./src/state');
 var Map = require('./src/map');
 
-var game = new Game({
-    maxPlayers: 10
-}, new Map());
+var game = new Game(new Map());
 
 function pickOne(primary, backup, property) {
     return property in primary ? primary[property] : backup[property];
@@ -44,10 +42,14 @@ app.get('/monitor', function (req, res) { res.sendfile('monitor.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    var player;
+    var player, pindex;
 
     if (game.canAddPlayer()) {
         player = game.addPlayer(socket);
+        pindex = game.players.indexOf(player);
+
+        player.props.x = game.map.start_location[pindex][0];
+        player.props.y = game.map.start_location[pindex][1];
 
         socket.on('disconnect', function () {
             if (player) {

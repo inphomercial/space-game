@@ -6,14 +6,6 @@ var lodash = require('lodash');
  * @constructor
  * @param {Object} props
  */
-function GameConfiguration(props) {
-    this.maxPlayers = props.maxPlayers;
-}
-
-/**
- * @constructor
- * @param {Object} props
- */
 function PlayerProperties(props) {
     this.id = props.id;
     this.color = props.color;
@@ -37,10 +29,9 @@ function Player(socket, props) {
 
 /**
  * @constructor
- * @param {Object} config
  * @param {Map} map
  */
-function Game(config, map) {
+function Game(map) {
     /**
      * tracks available colors
      */
@@ -61,11 +52,6 @@ function Game(config, map) {
      * @type {Player[]}
      */
     this.players = [];
-
-    /**
-     * @type {GameConfiguration}
-     */
-    this.config = new GameConfiguration(config);
 
     /**
      * @type {Map}
@@ -99,7 +85,7 @@ Game.prototype.removePlayer = function (player) {
  * @return {Boolean}
  */
 Game.prototype.canAddPlayer = function () {
-    return this.players.length < this.config.maxPlayers;
+    return this.players.length < this.map.start_location.length;
 };
 
 Game.prototype.getState = function () {
