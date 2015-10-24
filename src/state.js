@@ -2,17 +2,6 @@
 
 var lodash = require('lodash');
 
-var colors = [
-    'red',
-    'blue',
-    'orange',
-    'purple',
-    'pink',
-    'yellow',
-    'white',
-    'brown',
-];
-
 /**
  * @constructor
  * @param {Object} props
@@ -51,9 +40,20 @@ function Player(socket, props) {
  */
 function Game(config) {
     /**
-     * tracks how many players this game has had
+     * tracks available colors
      */
-    this.playerTick = 0;
+    this.playerColors = [
+        'red',
+        'blue',
+        'orange',
+        'purple',
+        'pink',
+        'yellow',
+        'brown',
+        'cornsilk',
+        'paleturquoise',
+        'violet'
+    ];
 
     /**
      * @type {Player[]}
@@ -73,7 +73,7 @@ function Game(config) {
 Game.prototype.addPlayer = function (socket) {
     var player = new Player(socket, new PlayerProperties({
         id: socket.id,
-        color: colors[this.playerTick++]
+        color: this.playerColors.shift()
     }));
 
     this.players.push(player);
@@ -84,6 +84,7 @@ Game.prototype.addPlayer = function (socket) {
  * @param {Player}
  */
 Game.prototype.removePlayer = function (player) {
+    this.playerColors.push(player.props.color);
     lodash.pull(this.players, player);
 };
 
