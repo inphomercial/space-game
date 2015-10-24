@@ -1,7 +1,8 @@
 'use strict';
 
 function setup() {
-    createCanvas(windowWidth, windowHeight);
+    createCanvas(displayWidth, displayHeight);
+    background("black");
 }
 
 function draw() {
