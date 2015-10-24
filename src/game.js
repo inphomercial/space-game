@@ -1,12 +1,9 @@
 var socket = io();
 
 var game_state,
-ships = [],
-bullets = [],
 stars = [],
-shooting_stars = [];
-
-var ship_images;
+shooting_stars = [],
+ship_images;
 
 function setup() {
     ship_images = {
