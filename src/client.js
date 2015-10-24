@@ -44,6 +44,7 @@ function draw() {
 
 function touchStarted() {
     flame_sound.play();
+    flame_sound.loop(10);
 }
 
 function touchEnded() {
