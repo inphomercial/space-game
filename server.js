@@ -58,6 +58,17 @@ server_socket.on('connection', function (socket) {
             player.props.y = pickOne(props, player.props, 'y');
         });
 
+        // this is a monitor
+        socket.on('game:control', function () {
+            game.removePlayer(player);
+            player.props = undefined;
+            player = undefined;
+
+            setInterval(function () {
+                socket.emit('game:state', game.getState());
+            }, 1000);
+        });
+
         socket.emit('player:props', player.props);
     } else {
         socket.emit('player:better-luck-next-time');

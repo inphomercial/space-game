@@ -28,3 +28,10 @@ function draw() {
         socket.emit('player:turn', { rotation_speed: rotation_speed });
     }
 }
+
+function asController() {
+    socket.emit('game:control');
+    socket.on('game:state', function (state) {
+        console.log('game state', state);
+    });
+}

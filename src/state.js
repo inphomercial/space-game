@@ -26,6 +26,7 @@ function GameConfiguration(props) {
  * @param {Object} props
  */
 function PlayerProperties(props) {
+    this.id = props.id;
     this.color = props.color;
     this.boost = props.boost;
     this.rotation_speed = props.rotation_speed;
@@ -71,6 +72,7 @@ function Game(config) {
  */
 Game.prototype.addPlayer = function (socket) {
     var player = new Player(socket, new PlayerProperties({
+        id: socket.id,
         color: colors[this.playerTick++]
     }));
 
@@ -92,6 +94,12 @@ Game.prototype.canAddPlayer = function () {
     return this.players.length < this.config.maxPlayers;
 };
 
+Game.prototype.getState = function () {
+    return {
+        players: lodash.pluck(this.players, 'props')
+    };
+};
+
 module.exports = Game;
 module.exports.Player = Player;
 
@@ -105,4 +113,5 @@ if (require.main === module) {
     game.removePlayer(player1);
     console.log(JSON.stringify(game, null, '  '));
     console.log(JSON.stringify(player2, null, '  '));
+    console.log(JSON.stringify(game.getState()))
 }
