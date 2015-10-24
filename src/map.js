@@ -1,6 +1,7 @@
 'use strict';
 
 function Map() {
+    this.map_image = 'assets/track-level-1.png';
     this.start_location = [
         [100, 100],
         [200, 100],

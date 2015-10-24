@@ -7,10 +7,12 @@ var game_state = {},
     stars = [],
     shooting_stars = [],
     ship_images,
+    map_image,
     flames;
 
 function setup() {
     flames = loadAnimation('assets/ship-flame-1.png', 'assets/ship-flame-4.png');
+
 
     ship_images = {
         'red' : loadImage('assets/ship-body-1.png'),
@@ -29,6 +31,7 @@ function setup() {
 
     socket.on('game:props', function(_game_props){
         game_props = _game_props;
+        map_image = loadImage(game_props.map.map_image);
     });
 
     socket.on('game:state', function(_game_state){
@@ -158,4 +161,7 @@ function render_map() {
         });
         endShape(CLOSE);
     }
+
+    imageMode(CORNER);
+    image(map_image,0,0);
 }
