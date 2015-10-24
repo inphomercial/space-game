@@ -1,7 +1,14 @@
 var socket = io();
 
+<<<<<<< 44dbd7c463566b11389b5c9c82f35095467b1128
 stars = [];
 var game_state;
+=======
+var ships = [],
+bullets = [],
+stars = [],
+shooting_stars = [];
+>>>>>>> Shooting star field, refactoring, subtle changes
 
 var ship_images;
 
@@ -59,15 +66,23 @@ function setup() {
   textFont('Georgia');
   createCanvas(displayWidth, displayHeight);
 
-  drawStarField(200);
+  initStarField(200);
 }
 
 function draw() {
     background("#101f2e");
 
-    for (var i = 0; i < stars.length; i++) {
-        stars[i].update();
-    }
+    stars.forEach(function(star) {
+        star.update();
+    });
+
+    checkForShootingStar();
+    shooting_stars.forEach(function(shooting_star, index) {
+        shooting_star.shoot();
+        if (shooting_star.life <= 0) {
+            shooting_stars.splice(index, 1);
+        }
+    });
 }
 
 function Star(x, y, color, size) {
@@ -75,29 +90,55 @@ function Star(x, y, color, size) {
     this.y = y;
     this.color = color;
     this.size = size;
+    this.timer = random(0, .3);
 }
 
 Star.prototype.update = function() {
     rectMode(CENTER);
     fill(this.color);
     noStroke();
-    size = noise(frameCount * .1, this.x, this.y) * 5;
+    size = noise(frameCount * this.timer, this.x, this.y) * 5;
     rect(this.x, this.y, size, size);
 };
 
-function drawStarField(num) {
+Star.prototype.shoot = function() {
+    this.x = lerp(this.x, this.end_x, .01);
+    this.y = lerp(this.y, this.end_y, .01);
+    this.size -= .02;
+    this.life--;
+    fill(this.color);
+    rect(this.x, this.y, this.size, this.size);
+};
 
-    var randomColor = function() {
-        var colors = ["#d3c484", "#42445c", "#8683d4"];
-        return colors[Math.floor(Math.random()*colors.length)];
-    };
+var checkForShootingStar = function() {
+    if(Math.random() > .99) createShootingStar();
+};
 
+var createShootingStar = function() {
+    var star = new Star(randomWidthPosition(), randomHeightPosition(), randomColor(), random(1, 8));
+    star.life = random(0, 70);
+    star.end_x = randomWidthPosition();
+    star.end_y = randomHeightPosition();
+    shooting_stars.push(star);
+};
+
+var randomColor = function() {
+    var colors = ["#d3c484", "#42445c", "#8683d4"];
+    return colors[Math.floor(Math.random() * colors.length)];
+};
+
+var randomHeightPosition = function() {
+    return random(0, displayHeight);
+};
+
+var randomWidthPosition = function() {
+    return random(0, displayWidth);
+};
+
+function initStarField(num) {
     while (num--) {
-        random_x = random(0, displayWidth);
-        random_y = random(0, displayHeight);
-        size = random(3, 5);
-
-        var star = new Star(random_x, random_y, randomColor(), size);
+        size = random(1, 8);
+        var star = new Star(randomWidthPosition(), randomHeightPosition(), randomColor(), size);
         stars.push(star);
     }
 };
