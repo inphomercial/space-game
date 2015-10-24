@@ -18,12 +18,16 @@ function setup() {
 }
 
 function draw() {
-    if (bg) background(bg);
-
-    socket.emit('player:turn', {
+    var turn = {
         rotation_speed: pRotationZ - rotationZ,
         boost: touchIsDown || mouseIsPressed
-    });
+    };
+
+    if (bg) background(bg);
+    socket.emit('player:turn', turn);
+
+    textSize(32);
+    text(JSON.stringify(turn, null, '  '), 10, 30);
 }
 
 function asController() {
