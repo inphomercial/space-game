@@ -71,3 +71,5 @@ Map.prototype.display = function( debug ) {
         endShape();
     }
 };
+
+module.exports = Map;

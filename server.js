@@ -20,9 +20,11 @@ var server_http = new http.Server(app);
 var server_socket = socket_io(server_http);
 
 var Game = require('./src/state');
+var Map = require('./src/map');
+
 var game = new Game({
     maxPlayers: 10
-}, /* Dean: placeholder map */ { points: [1, 2, 3, 4] });
+}, new Map());
 
 function pickOne(primary, backup, property) {
     return property in primary ? primary[property] : backup[property];
