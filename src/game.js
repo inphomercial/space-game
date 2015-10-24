@@ -1,14 +1,10 @@
 var socket = io();
 
-<<<<<<< 44dbd7c463566b11389b5c9c82f35095467b1128
-stars = [];
-var game_state;
-=======
-var ships = [],
+var game_state,
+ships = [],
 bullets = [],
 stars = [],
 shooting_stars = [];
->>>>>>> Shooting star field, refactoring, subtle changes
 
 var ship_images;
 
