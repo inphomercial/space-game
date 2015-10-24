@@ -103,11 +103,11 @@ Star.prototype.shoot = function() {
     rect(this.x, this.y, this.size, this.size);
 };
 
-var checkForShootingStar = function() {
+function checkForShootingStar() {
     if(Math.random() > .99) createShootingStar();
 };
 
-var createShootingStar = function() {
+function createShootingStar() {
     var star = new Star(randomWidthPosition(), randomHeightPosition(), randomColor(), random(1, 8));
     star.life = random(0, 70);
     star.end_x = randomWidthPosition();
@@ -115,16 +115,16 @@ var createShootingStar = function() {
     shooting_stars.push(star);
 };
 
-var randomColor = function() {
+function randomColor() {
     var colors = ["#d3c484", "#42445c", "#8683d4"];
     return colors[Math.floor(Math.random() * colors.length)];
 };
 
-var randomHeightPosition = function() {
+function randomHeightPosition() {
     return random(0, displayHeight);
 };
 
-var randomWidthPosition = function() {
+function randomWidthPosition() {
     return random(0, displayWidth);
 };
 
