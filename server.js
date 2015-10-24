@@ -1,6 +1,6 @@
 'use strict';
 
-var FPS = 60;
+var FPS = 30;
 var PORT = process.env.PORT || 3000;
 var DEBUG = process.env.DEBUG || process.env.NODE_ENV === 'development';
 
