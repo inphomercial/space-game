@@ -1,3 +1,5 @@
+var DEBUG = true;
+
 var socket = io();
 
 var game_state = {},
@@ -116,7 +118,7 @@ function initStarField(num) {
 };
 
 function draw_game() {
-    render_map(true);
+    render_map();
     imageMode(CENTER);
 
     game_state.players && game_state.players.forEach( function (ship) {
@@ -128,13 +130,13 @@ function draw_game() {
     });
 }
 
-function render_map( debug ) {
+function render_map() {
     if (!game_props.map) {
         return;
     }
 
     // ADD img(map_layer) stuff here
-    if(debug) {
+    if (DEBUG) {
         strokeWeight(10);
         stroke(255, 120);
         noFill();
