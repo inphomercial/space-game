@@ -32,6 +32,7 @@ app.set('view cache', DEBUG);
 
 app.use('/node_modules', express.static('node_modules'));
 app.use('/vendor', express.static('vendor'));
+app.use('/src', express.static('src'));
 app.get('/', function (req, res) { res.sendfile('client.html'); });
 app.get('/stats', function (req, res) { res.json(stats); });
 
