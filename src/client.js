@@ -1,20 +1,25 @@
 'use strict';
 
 var socket;
-var bg;
+var player_info;
 
 function setup() {
     socket = io();
+    player_info = {};
 
     createCanvas(windowWidth, windowHeight);
 
     socket.on('player:props', function (props) {
-        bg = props.color;
+        player_info = props;
     });
 
     socket.on('player:better-luck-next-time', function () {
         alert('better luck next time, kiddo');
     });
+}
+
+function windowResized() {
+    resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -23,11 +28,12 @@ function draw() {
         boost: touchIsDown || mouseIsPressed
     };
 
-    if (bg) background(bg);
+    if (player_info.color) background(player_info.color);
     socket.emit('player:turn', turn);
 
     textSize(32);
-    text(JSON.stringify(turn, null, '  '), 10, 30);
+    text("boost: " + JSON.stringify(turn.boost), 10, 130);
+    text("rotation_speed: " + JSON.stringify(turn.rotation_speed), 10, 160);
 }
 
 function asController() {
