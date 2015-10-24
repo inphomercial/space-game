@@ -1,11 +1,14 @@
 'use strict';
 
-var socket;
-var player_info;
+var socket,
+    player_info,
+    flame_sound;
 
 function setup() {
     socket = io();
     player_info = {};
+
+    flame_sound = loadSound('assets/sounds/farts.mp3');
 
     createCanvas(windowWidth, windowHeight);
 
@@ -37,6 +40,14 @@ function draw() {
     text("X: " + JSON.stringify(rotationX), 0, 190);
     text("Y: " + JSON.stringify(rotationY), 0, 220);
     text("Z: " + JSON.stringify(rotationZ), 0, 250);
+}
+
+function touchStarted() {
+    flame_sound.play();
+}
+
+function touchEnded() {
+    flame_sound.stop();
 }
 
 function asController() {
