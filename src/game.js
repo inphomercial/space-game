@@ -1,7 +1,6 @@
 var socket;
 
-var ships = [],
-bullets = [];
+var ships = [];
 
 function setup() {
   socket = io.connect('http://localhost:8080');
@@ -42,12 +41,6 @@ function setup() {
     draw_ships();
   });
 
-  socket.on('bullet_data', function(_bullets){
-    bullets = _bullets;
-    draw_bullets();
-    console.log('bullets: ' + bullets);
-  });
-
   socket.emit('display');
 
   textFont('Georgia');
@@ -85,13 +78,5 @@ function draw_ships() {
     rotate(ship.r);
     triangle(5, 0, -7, 5, -7, -5)
     pop();
-  });
-}
-
-function draw_bullets() {
-  stroke(255);
-  noFill();
-  bullets.forEach( function (bullet) {
-    point(bullet.x, bullet.y);
   });
 }
