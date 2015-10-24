@@ -11,10 +11,10 @@ function PlayerProperties(props) {
     this.id = props.id;
     this.color = props.color;
     this.boost = props.boost;
-    this.rotation_speed = props.rotation_speed;
-    this.rotation = props.rotation;
-    this.vx = props.vx;
-    this.vy = props.vy;
+    this.rotation_speed = props.rotation_speed || 0;
+    this.rotation = props.rotation || 0;
+    this.vx = props.vx || 0;
+    this.vy = props.vy || 0;
     this.x = props.x;
     this.y = props.y;
 }
@@ -37,10 +37,10 @@ Player.prototype.update = function(game) {
     }
 
     // Bounce off the walls
-    if( this.props.x + this.props.vx > width || this.props.x + this.props.vx < 0){
+    if( this.props.x + this.props.vx > 1920 || this.props.x + this.props.vx < 0){
         this.props.vx *= -1;
     }
-    if( this.props.y + this.props.vy > height || this.props.y + this.props.vy < 0){
+    if( this.props.y + this.props.vy > 1080 || this.props.y + this.props.vy < 0){
         this.props.vy *= -1;
     }
 
