@@ -31,7 +31,7 @@ function Player(socket, props) {
 
 
 Player.prototype.update = function(game) {
-    if(this.boost) {
+    if(this.props.boost) {
         this.props.vx += game.boost_speed * Math.cos(this.props.rotation);
         this.props.vy += game.boost_speed * Math.sin(this.props.rotation);
     }
