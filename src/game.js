@@ -32,7 +32,7 @@ function setup() {
     });
 
     socket.on('game:state', function(_game_state){
-        console.log('ships: ' + JSON.stringify(game_state.players, null, '  '));
+        console.log('[%s] ships: %s', Date.now(), JSON.stringify(game_state.players, null, '  '));
         game_state = _game_state;
     });
 
