@@ -94,7 +94,7 @@ function checkForShootingStar() {
 
 function createShootingStar() {
     var star = new Star(randomWidthPosition(), randomHeightPosition(), randomColor(), random(1, 8));
-    star.life = random(0, 150);
+    star.life = random(20, 150);
     star.end_x = randomWidthPosition();
     star.end_y = randomHeightPosition();
     shooting_stars.push(star);
