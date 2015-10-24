@@ -45,4 +45,8 @@ server_socket.on('connection', function (socket) {
     socket.on('disconnect', function () {
         socket.broadcast.emit('game:player:left', socket.__guid);
     });
+
+    socket.on('turn', function (d) { console.log(d); });
 });
+
+
