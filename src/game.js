@@ -1,6 +1,12 @@
 var socket;
 
+<<<<<<< 91c7d8c82b9c9b67f33523f9a9e559739dcf1cd1
 var ships = [];
+=======
+var ships = [],
+bullets = [],
+stars = [];
+>>>>>>> updating starfield
 
 function setup() {
   socket = io.connect('http://localhost:8080');
@@ -47,24 +53,46 @@ function setup() {
   createCanvas(displayWidth, displayHeight);
   // fullscreen();
 
-  background("#101f2e");
   drawStarField(200);
 }
 
-function drawStarField(stars) {
+function draw() {
+    background("#101f2e");
+
+    for (var i = 0; i < stars.length; i++) {
+        stars[i].update();
+    }
+}
+
+function Star(x, y, color, size) {
+    this.x = x;
+    this.y = y;
+    this.color = color;
+    this.size = size;
+}
+
+Star.prototype.update = function() {
+    rectMode(CENTER);
+    fill(this.color);
+    noStroke();
+    size = noise(frameCount * .1, this.x, this.y) * 5;
+    rect(this.x, this.y, size, size);
+};
+
+function drawStarField(num) {
 
     var randomColor = function() {
         var colors = ["#d3c484", "#42445c", "#8683d4"];
         return colors[Math.floor(Math.random()*colors.length)];
     };
 
-    while (stars--) {
+    while (num--) {
         random_x = random(0, displayWidth);
         random_y = random(0, displayHeight);
         size = random(3, 5);
-        fill(randomColor());
-        noStroke();
-        rect(Number(random_x), Number(random_y), size, size);
+
+        var star = new Star(random_x, random_y, randomColor(), size);
+        stars.push(star);
     }
 };
 
