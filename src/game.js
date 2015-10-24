@@ -1,7 +1,7 @@
 var socket = io();
 
-var game_state,
-    map,
+var game_state = {},
+    game_props = {},
     stars = [],
     shooting_stars = [],
     ship_images;
@@ -22,14 +22,13 @@ function setup() {
 
     socket.emit('game:control');
 
-    socket.on('game:props', function(game_props){
-        map = game_props.map;
+    socket.on('game:props', function(_game_props){
+        game_props = _game_props;
     });
 
     socket.on('game:state', function(_game_state){
         console.log('ships: ' + game_state);
         game_state = _game_state;
-        draw_game();
     });
 
   socket.emit('display');
@@ -54,6 +53,8 @@ function draw() {
             shooting_stars.splice(index, 1);
         }
     });
+
+    draw_game();
 }
 
 function Star(x, y, color, size) {
@@ -115,9 +116,10 @@ function initStarField(num) {
 };
 
 function draw_game() {
-    render_map;
+    render_map(true);
     imageMode(CENTER);
-    game_state.players.forEach( function (ship) {
+
+    game_state.players && game_state.players.forEach( function (ship) {
         push();
         translate(ship.x, ship.y);
         rotate(ship.r);
@@ -127,15 +129,19 @@ function draw_game() {
 }
 
 function render_map( debug ) {
+    if (!game_props.map) {
+        return;
+    }
+
     // ADD img(map_layer) stuff here
     if(debug) {
         strokeWeight(10);
         stroke(255, 120);
         noFill();
         beginShape();
-        map.track_points.forEach(function (point){
+        game_props.map.track_points.forEach(function (point){
             vertex(point[0], point[1]);
         });
-        endShape();
+        endShape(CLOSE);
     }
 }

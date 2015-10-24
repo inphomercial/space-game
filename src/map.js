@@ -58,4 +58,5 @@ Map.prototype.getProgress = function(coordinate) {
 
     return progress;
 };
-module.exports = Map;
+
+if (typeof window === 'undefined') module.exports = Map;
