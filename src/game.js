@@ -51,10 +51,29 @@ function setup() {
   socket.emit('display');
 
   textFont('Georgia');
-  createCanvas(1280, 720);
-  fullscreen();
-  background(100);
+  createCanvas(displayWidth, displayHeight);
+  // fullscreen();
+
+  background("#101f2e");
+  drawStarField(200);
 }
+
+function drawStarField(stars) {
+
+    var randomColor = function() {
+        var colors = ["#d3c484", "#42445c", "#8683d4"];
+        return colors[Math.floor(Math.random()*colors.length)];
+    };
+
+    while (stars--) {
+        random_x = random(0, displayWidth);
+        random_y = random(0, displayHeight);
+        size = random(3, 5);
+        fill(randomColor());
+        noStroke();
+        rect(Number(random_x), Number(random_y), size, size);
+    }
+};
 
 function draw_ships() {
   background(100);
