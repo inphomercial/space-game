@@ -140,7 +140,7 @@ function render_map() {
         strokeWeight(10);
         stroke(255, 120);
         noFill();
-        beginShape();
+        beginShape(POINTS);
         game_props.map.track_points.forEach(function (point){
             vertex(point[0], point[1]);
         });
