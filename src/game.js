@@ -1,18 +1,15 @@
-var socket;
+var socket = io();
+
 
 var ships = [],
-bullets = [],
 stars = [];
+var game_state;
 
 function setup() {
-  socket = io.connect('http://localhost:8080');
-
-  socket.on('game_data', function(msg){
-    console.log(msg);
-  });
+	socket.emit('game:control');
 
   socket.on('pregame', function( countdown ){
-    background(100);
+    background(100); // Clears Background
     textAlign(CENTER);
     noStroke();
     textStyle(ITALIC)
@@ -26,7 +23,7 @@ function setup() {
   });
 
   socket.on('postgame', function( winner ){
-    background(100);
+    background(100); // Clears Background
     textAlign(CENTER);
     noStroke();
     textStyle(ITALIC)
@@ -37,17 +34,16 @@ function setup() {
     textSize(70);
   });
 
-  socket.on('ship_data', function(_ships){
-    console.log('ships: ' + _ships);
-    ships = _ships;
-    draw_ships();
+  socket.on('game:state', function(_game_state){
+    console.log('ships: ' + game_state);
+    game_state = _game_state;
+    draw_game();
   });
 
   socket.emit('display');
 
   textFont('Georgia');
   createCanvas(displayWidth, displayHeight);
-  // fullscreen();
 
   drawStarField(200);
 }
@@ -92,15 +88,14 @@ function drawStarField(num) {
     }
 };
 
-function draw_ships() {
-  background(100);
-  stroke(255);
-  fill(100);
+function draw_game() {
+  // background('CURRENT MAP');
+  imageMode(CENTER);
   ships.forEach( function (ship) {
     push();
     translate(ship.x, ship.y);
     rotate(ship.r);
-    triangle(5, 0, -7, 5, -7, -5)
+    image(ship.image,0,0);
     pop();
   });
 }

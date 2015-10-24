@@ -27,6 +27,8 @@ function draw() {
     if (rotation_speed != 0) {
         socket.emit('player:turn', { rotation_speed: rotation_speed });
     }
+
+    socket.emit('player:boost', { boost_on : touchIsDown });
 }
 
 function asController() {
