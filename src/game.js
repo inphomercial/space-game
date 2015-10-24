@@ -1,12 +1,8 @@
 var socket;
 
-<<<<<<< 91c7d8c82b9c9b67f33523f9a9e559739dcf1cd1
-var ships = [];
-=======
 var ships = [],
 bullets = [],
 stars = [];
->>>>>>> updating starfield
 
 function setup() {
   socket = io.connect('http://localhost:8080');
