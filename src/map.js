@@ -58,18 +58,4 @@ Map.prototype.getProgress = function(coordinate) {
 
     return progress;
 };
-
-Map.prototype.display = function( debug ) {
-    if(debug) {
-        strokeWeight(10);
-        stroke(255, 120);
-        noFill();
-        beginShape();
-        this.track_points.forEach(function (point){
-            vertex(point[0], point[1]);
-        });
-        endShape();
-    }
-};
-
 module.exports = Map;

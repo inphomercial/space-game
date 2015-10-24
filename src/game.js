@@ -116,7 +116,7 @@ function initStarField(num) {
 };
 
 function draw_game() {
-    // background('CURRENT MAP');
+    render_map;
     imageMode(CENTER);
     game_state.players.forEach( function (ship) {
         push();
@@ -125,4 +125,18 @@ function draw_game() {
         image(ship_images[ship.color],0,0);
         pop();
     });
+}
+
+function render_map( debug ) {
+    // ADD img(map_layer) stuff here
+    if(debug) {
+        strokeWeight(10);
+        stroke(255, 120);
+        noFill();
+        beginShape();
+        map.track_points.forEach(function (point){
+            vertex(point[0], point[1]);
+        });
+        endShape();
+    }
 }
