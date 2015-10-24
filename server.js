@@ -60,6 +60,8 @@ server_socket.on('connection', function (socket) {
             player.props.vy = pickOne(props, player.props, 'vy');
             player.props.x = pickOne(props, player.props, 'x');
             player.props.y = pickOne(props, player.props, 'y');
+
+            player.update();
         });
 
         socket.emit('player:props', player.props);

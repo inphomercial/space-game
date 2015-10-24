@@ -124,7 +124,7 @@ function draw_game() {
     game_state.players && game_state.players.forEach( function (ship) {
         push();
         translate(ship.x, ship.y);
-        rotate(ship.r);
+        rotate(ship.rotation);
         image(ship_images[ship.color],0,0);
         pop();
     });

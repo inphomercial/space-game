@@ -6,11 +6,13 @@ var lodash = require('lodash');
  * @constructor
  * @param {Object} props
  */
+
 function PlayerProperties(props) {
     this.id = props.id;
     this.color = props.color;
     this.boost = props.boost;
     this.rotation_speed = props.rotation_speed;
+    this.rotation = props.rotation;
     this.vx = props.vx;
     this.vy = props.vy;
     this.x = props.x;
@@ -25,6 +27,27 @@ function PlayerProperties(props) {
 function Player(socket, props) {
     this.socket = socket;
     this.props = props;
+}
+
+
+Player.prototype.update = function() {
+    angleMode(RADIANS);
+    if(this.boost) {
+        this.vx += game.boost_speed * Math.cos(this.rotation);
+        this.vy += game.boost_speed * Math.sin(this.rotation);
+    }
+
+    // Bounce off the walls
+    if( this.x + this.vx > width || this.x + this.vx < 0){
+        this.vx *= -1;
+    }
+    if( this.y + this.vy > height || this.y + this.vy < 0){
+        this.vy *= -1;
+    }
+
+    this.x += this.vx;
+    this.y += this.vy;
+    this.rotation += this.rotation_speed;
 }
 
 /**
@@ -57,6 +80,11 @@ function Game(map) {
      * @type {Map}
      */
     this.map = map;
+
+    /**
+     * @type {Number}
+     */
+    this.boost_speed = 0.1;
 }
 
 /**
