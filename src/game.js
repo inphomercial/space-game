@@ -11,7 +11,6 @@ function SpaceWarsGame () {
   this.height = 720;
   this.max_speed = 3;
   this.boost_speed = 0.1;
-  this.bullet_length = 30*10;
 
   this.pregame_millis = 10000;
   this.postgame_millis = 10000;
@@ -49,20 +48,6 @@ SpaceWarsGame.prototype.update = function () {
           }
         }
         io.sockets.emit('ship_data', this.ships);
-      }
-
-      // Update bullets
-      if( this.bullets ) {
-        for (var i = this.bullets.length - 1; i >= 0; i--) {
-          if(this.bullets[i].isDead()){
-            this.bullets.splice(i, 1);
-          } else {
-            this.bullets[i].update();
-          }
-        }
-
-        this.hitCheck();
-        io.sockets.emit('bullet_data', this.bullets);
       }
 
       if( this.ships.length < 2){
@@ -190,33 +175,6 @@ function Bullet (ship_id, x, y, r) {
   this.timer = game.bullet_length;
   this.dead = false;
 }
-
-Bullet.prototype.update = function () {
-  this.x += this.vx;
-  this.y += this.vy;
-
-  // Keep in bounds
-  if(this.x > game.width) {
-    this.x = 0;
-  } else if (this.x < 0) {
-    this.x = game.width;
-  }
-
-  if(this.y > game.height) {
-    this.y = 0;
-  } else if (this.y < 0) {
-    this.y = game.height;
-  }
-  this.timer--;
-};
-
-Bullet.prototype.isDead = function () {
-  if(this.timer < 0 || this.dead === true){
-    return true;
-  } else {
-    return false;
-  }
-};
 
 function getShip(id) {
   for (var i = game.ships.length - 1; i >= 0; i--) {
