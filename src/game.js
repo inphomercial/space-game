@@ -29,7 +29,6 @@ function setup() {
     socket.on('game:state', function(_game_state){
         console.log('ships: ' + game_state);
         game_state = _game_state;
-        debugger;
         draw_game();
     });
 
