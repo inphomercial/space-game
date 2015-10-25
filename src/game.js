@@ -15,16 +15,16 @@ function setup() {
 
 
     ship_images = {
-        'red' : loadImage('assets/ship-body-1.png'),
-        'blue' : loadImage('assets/ship-body-1.png'),
-        'orange' : loadImage('assets/ship-body-1.png'),
-        'purple' : loadImage('assets/ship-body-1.png'), 
-        'pink' : loadImage('assets/ship-body-1.png'),
-        'yellow' : loadImage('assets/ship-body-1.png'),
-        'brown' : loadImage('assets/ship-body-1.png'),
-        'cornsilk' : loadImage('assets/ship-body-1.png'),
-        'paleturquoise' : loadImage('assets/ship-body-1.png'),
-        'violet' : loadImage('assets/ship-body-1.png')
+        '#ff0056' : loadImage('assets/ship-body-1.png'),
+        '#00bbff' : loadImage('assets/ship-body-2.png'),
+        '#ff2bce' : loadImage('assets/ship-body-3.png'),
+        '#00cf18' : loadImage('assets/ship-body-4.png'), 
+        '#ffb82a' : loadImage('assets/ship-body-5.png'),
+        '#02c9bf' : loadImage('assets/ship-body-6.png'),
+        '#7429ff' : loadImage('assets/ship-body-7.png'),
+        '#ffffff' : loadImage('assets/ship-body-8.png'),
+        '#faed22' : loadImage('assets/ship-body-9.png'),
+        'violet' : loadImage('assets/ship-body-10.png')
     }
 
     socket.emit('game:control');

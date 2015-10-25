@@ -69,15 +69,16 @@ function Game(map) {
      * tracks available colors
      */
     this.playerColors = [
-        'red',
-        'blue',
-        'orange',
-        'purple',
-        'pink',
-        'yellow',
-        'brown',
-        'cornsilk',
-        'paleturquoise',
+        // red: #ff0056; blue: #00bbff; pink: #ff2bce; green: #00cf18; orange: #ffb82a; teal: #02c9bf; purple: #7429ff; white: #ffffff; yellow: #faed22;
+        '#ff0056',
+        '#00bbff',
+        '#ff2bce',
+        '#00cf18',
+        '#ffb82a',
+        '#02c9bf',
+        '#7429ff',
+        '#ffffff',
+        '#faed22',
         'violet'
     ];
 
