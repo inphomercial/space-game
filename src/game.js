@@ -4,8 +4,10 @@ var socket = io();
 
 var game_state = {},
     game_props = {},
+    ship_sprites = {},
     stars = [],
     shooting_stars = [],
+    box,
     ship_images,
     map_image,
     map_pixels,
@@ -51,7 +53,7 @@ function setup() {
         '#ff0056' : loadImage('assets/ship-body-1.png'),
         '#00bbff' : loadImage('assets/ship-body-2.png'),
         '#ff2bce' : loadImage('assets/ship-body-3.png'),
-        '#00cf18' : loadImage('assets/ship-body-4.png'), 
+        '#00cf18' : loadImage('assets/ship-body-4.png'),
         '#ffb82a' : loadImage('assets/ship-body-5.png'),
         '#02c9bf' : loadImage('assets/ship-body-6.png'),
         '#7429ff' : loadImage('assets/ship-body-7.png'),
@@ -77,6 +79,8 @@ function setup() {
         map_pixels = function (x, y) {
             return context.getImageData(x, y, 1, 1).data;
         };
+        box = createSprite(700, 545, 720, 460);
+        box.debug = true;
     });
 
     socket.on('game:state', function(_game_state){
@@ -95,14 +99,33 @@ function setup() {
 function draw() {
     background("#101f2e");
 
-    if (game_state.players) {
-        game_state.players.forEach(function (player) {
-            socket.emit('game:player:turn', {
-                player_id: player.id,
-                off_tracks: off_tracks(player)
-            });
+    game_state.players && game_state.players.forEach(function (player) {
+        if(!ship_sprites[player.id]){
+            ship_sprites[player.id] = createSprite(player.x, player.y);
+            ship_sprites[player.id].collide(box);
+            ship_sprites[player.id].debug = true;
+        }
+        imageMode(CENTER);
+        ship_sprites[player.id].draw = function() {
+            this.position.x = player.x;
+            this.position.y = player.y;
+            push();
+            rotate(player.rotation);
+            image(ship_images[player.color],0,0);
+            if(player.boost){
+                animation(flames, -21, 0);
+            }
+            pop();
+            ship_sprites[player.id].collide(box);
+        };
+
+        socket.emit('game:player:turn', {
+            player_id: player.id,
+            off_tracks: off_tracks(player),
+            x: ship_sprites[player.id].position.x,
+            y: ship_sprites[player.id].position.y
         });
-    }
+    })
 
     stars.forEach(function(star) {
         star.update();
@@ -185,18 +208,7 @@ function initStarField(num) {
 
 function draw_game() {
     render_map();
-    imageMode(CENTER);
-
-    game_state.players && game_state.players.forEach( function (ship) {
-        push();
-        translate(ship.x, ship.y);
-        rotate(ship.rotation);
-        image(ship_images[ship.color],0,0);
-        if(ship.boost){
-            animation(flames, -21, 0);
-        }
-        pop();
-    });
+    drawSprites();
 }
 
 function render_map() {
