@@ -9,6 +9,7 @@ var game_state = {},
     ship_images,
     map_image,
     map_pixels,
+    blue_flames,
     flames;
 
 function off_tracks(player) {
@@ -46,6 +47,7 @@ function message(msg) {
 
 function setup() {
     flames = loadAnimation('assets/ship-flame-1.png', 'assets/ship-flame-4.png');
+    blue_flames = loadAnimation('assets/ship-flame-blue-1.png', 'assets/ship-flame-blue-4.png');
 
     ship_images = {
         '#ff0056' : loadImage('assets/ship-body-1.png'),
@@ -78,7 +80,9 @@ function setup() {
             return context.getImageData(x, y, 1, 1).data;
         };
         box = createSprite(700, 545, 720, 460);
-        box.debug = true;
+        if(DEBUG){
+            box.debug = true;
+        }
     });
 
     socket.on('game:state', function(_game_state){
@@ -99,9 +103,11 @@ function draw() {
 
     game_state.players && game_state.players.forEach(function (player) {
         if(!ship_sprites[player.id]){
-            ship_sprites[player.id] = createSprite(player.x, player.y);
-            ship_sprites[player.id].collide(box);
-            ship_sprites[player.id].debug = true;
+            ship_sprites[player.id] = createSprite(player.x, player.y, 35, 35);
+            // ship_sprites[player.id].collide(box);
+            if(DEBUG){
+                // ship_sprites[player.id].debug = true;
+            }
         }
         imageMode(CENTER);
         ship_sprites[player.id].draw = function() {
@@ -112,16 +118,21 @@ function draw() {
             image(ship_images[player.color],0,0);
             if(player.boost){
                 animation(flames, -21, 0);
+            } else {
+                animation(blue_flames, -21, 0);
             }
             pop();
-            ship_sprites[player.id].collide(box);
+            if(ship_sprites[player.id].collide(box)) {
+                player.x = this.position.x;
+                player.y = this.position.y;
+            }
         };
 
         socket.emit('game:player:turn', {
             player_id: player.id,
             off_tracks: off_tracks(player),
-            x: ship_sprites[player.id].position.x,
-            y: ship_sprites[player.id].position.y
+            x: player.x,
+            y: player.y
         });
     })
 
