@@ -4,6 +4,7 @@ var ROTATION_DAMPENING = 10;
 
 var socket,
     player_info,
+    ship_image,
     flame_sound;
 
 function setup() {
@@ -11,8 +12,7 @@ function setup() {
     player_info = {};
 
     flame_sound = loadSound('assets/sounds/farts.mp3');
-
-    createCanvas(windowWidth, windowHeight);
+    ship_image = document.getElementById('ship_image');
 
     socket.on('player:props', function (props) {
         player_info = props;
@@ -26,11 +26,8 @@ function setup() {
         document.getElementById('start_game').style.display = 'block';
         document.getElementById('start_game').style.opacity = '1';
 
-        document.getElementById('start_game').onclick = function () {
-            socket.emit('game:state:ready');
-            document.getElementById('start_game').style.display = 'none';
-            document.getElementById('start_game').style.opacity = '0';
-        };
+        document.getElementById('start_game').touchstart = stateReady;
+        document.getElementById('start_game').onclick = stateReady;
     });
 
     socket.on('game:state:startingIn', function (timeleft) {
@@ -43,11 +40,27 @@ function setup() {
             }, 500);
         }
     });
+
+    socket.on('connect', function () {
+        message(false);
+    });
+
+    socket.on('disconnect', function () {
+        message('disconnected from server. trying to connect...');
+        document.getElementById('start_game').style.display = 'none';
+        document.getElementById('start_game').style.opacity = '0';
+    });
+}
+
+function stateReady() {
+    message('letting server know...');
+    socket.emit('game:state:ready');
+    document.getElementById('start_game').style.display = 'none';
+    document.getElementById('start_game').style.opacity = '0';
 }
 
 function message(msg) {
-    var notification = document.getElementById('notification'),
-        canvas = document.getElementsByTagName('canvas')[0];
+    var notification = document.getElementById('notification');
 
     function style(elem, style, value) {
         if (!elem) {
@@ -59,16 +72,10 @@ function message(msg) {
 
     if (msg === false) {
         style(notification, 'opacity', '0');
-        style(canvas, 'opacity', '1');
     } else {
         notification.innerHTML = msg;
         style(notification, 'opacity', '1');
-        style(canvas, 'opacity', '.3');
     }
-}
-
-function windowResized() {
-    resizeCanvas(windowWidth, windowHeight);
 }
 
 function draw() {
@@ -77,15 +84,11 @@ function draw() {
         boost: touchIsDown || mouseIsPressed
     };
 
-    if (player_info.color) background(player_info.color);
     socket.emit('player:turn', turn);
-
-    textSize(32);
-    text("boost: " + JSON.stringify(turn.boost), 0, 130);
-    text("rotation_speed: " + JSON.stringify(turn.rotation_speed), 0, 160);
-    text("X: " + JSON.stringify(rotationX), 0, 190);
-    text("Y: " + JSON.stringify(rotationY), 0, 220);
-    text("Z: " + JSON.stringify(rotationZ), 0, 250);
+    document.body.style.backgroundColor = player_info.color;
+    ship_image.src = turn.boost ?
+        'assets/phone-ship-2.png' :
+        'assets/phone-ship-1.png';
 }
 
 function touchStarted() {

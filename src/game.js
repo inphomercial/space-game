@@ -71,7 +71,7 @@ function setup() {
     });
 
     socket.on('disconnect', function () {
-        message("disconnected from server. trying to connect...")
+        message('disconnected from server. trying to connect...');
     });
 
     socket.on('game:props', function(_game_props){

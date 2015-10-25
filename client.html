@@ -9,6 +9,11 @@
         <title>space-game</title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
+        <meta name="viewport" content="width=device-width, initial-scale=1.0,
+        minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <meta name="HandheldFriendly" content="true">
+
         <!-- vendor -->
         <link rel="stylesheet" href="node_modules/normalize.css/normalize.css">
         <script type="text/javascript" src="node_modules/p5/lib/p5.min.js"></script>
@@ -21,6 +26,12 @@
 
         <style type="text/css">
         html, body {
+            height: 100%;
+            width: 100%;
+            margin:0;
+            padding:0;
+            overflow: hidden;
+
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             -khtml-user-select: none;
@@ -29,59 +40,48 @@
             user-select: none;
         }
 
-        #start_game {
+        .notification {
             background: #1D1D1D;
             box-shadow: 0 0 6px 2px #292929;
             color: #44C744;
-            display: none;
             font-family: monospace;
-            font-size: 70px;
+            font-size: 30px;
             left: 50%;
             letter-spacing: 7px;
-            line-height: 65px;
+            line-height: 35px;
             opacity: 0;
-            padding: 0;
+            padding: 10px 20px;
             position: absolute;
             text-transform: uppercase;
             top: 50%;
-            transform: translateX(-50%) translateY(-50%);
+            transform: translateX(-50%) translateY(-50%) rotate(-90deg);
             transition: opacity .3s;
             z-index: 1;
         }
 
-        #start_game button {
+        .notification button {
             background: transparent;
             border: none;
             padding: 50px;
         }
 
-        #notification, canvas {
+        .notification {
             transition: opacity .3s;
         }
 
-        #notification {
-            background: #1D1D1D;
-            box-shadow: 0 0 6px 2px #292929;
-            color: #44C744;
-            font-family: monospace;
-            font-size: 70px;
+        #ship_image {
             left: 50%;
-            letter-spacing: 7px;
-            line-height: 65px;
-            opacity: 0;
-            padding: 50px;
             position: absolute;
-            text-transform: uppercase;
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
-            z-index: 1;
         }
         </style>
     </head>
     <body>
-        <div id="start_game">
+        <div class="notification" id="start_game" style="display: none" onclick="stateReady()">
             <button>Ready</button>
         </div>
-        <div id="notification"></div>
+        <div class="notification" id="notification"></div>
+        <img src="assets/phone-ship-1.png" id="ship_image" />
     </body>
 </html>
