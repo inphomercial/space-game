@@ -1,4 +1,4 @@
-var DEBUG = true;
+var DEBUG = false;
 
 var socket = io();
 
@@ -141,6 +141,20 @@ function draw() {
             y: player.y
         });
     })
+
+    var ship_ids = [];
+    if(game_state.players) {
+        ship_ids = game_state.players.map(function (d){ return d.id; });
+    }
+    for( var ship_id in ship_sprites) {
+        if(ship_sprites.hasOwnProperty(ship_id)){
+            if (ship_ids.indexOf(ship_id) === -1){
+                ship_sprites[ship_id].remove()
+                delete ship_sprites[ship_id];
+                console.log('ship_sprites removed: ' + ship_id);
+            }
+        }
+    };
 
     stars.forEach(function(star) {
         star.update();
