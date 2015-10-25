@@ -46,7 +46,7 @@ Player.prototype.update = function(game) {
         this.props.vy *= -1;
     }
 
-    var max_speed = 6;
+    var max_speed = this.props.off_tracks ? 1 : 6;
     mag = Math.sqrt(Math.pow(this.props.vx, 2) + Math.pow(this.props.vy, 2));
     // console.log('mag: ', mag);
     if (mag > max_speed) {
@@ -121,6 +121,16 @@ Game.prototype.addPlayer = function (socket) {
 };
 
 /**
+ * @param {String} id
+ * @return {Player}
+ */
+Game.prototype.getPlayer = function (id) {
+    return lodash.find(this.players, function (player) {
+        return player.props.id === id;
+    });
+};
+
+/**
  * @param {Player}
  */
 Game.prototype.removePlayer = function (player) {
@@ -146,7 +156,7 @@ module.exports = Game;
 module.exports.Player = Player;
 
 if (require.main === module) {
-    var game = new Game({ maxPlayers: 3 });
+    var game = new Game({ start_location: [[], []] });
     var player1 = game.addPlayer({ id: Math.random() });
     var player2 = game.addPlayer({ id: Math.random() });
     console.log(JSON.stringify(game, null, '  '));
@@ -156,4 +166,5 @@ if (require.main === module) {
     console.log(JSON.stringify(game, null, '  '));
     console.log(JSON.stringify(player2, null, '  '));
     console.log(JSON.stringify(game.getState()))
+    console.log(JSON.stringify(game.getPlayer(player2.props.id)));
 }

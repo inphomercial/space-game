@@ -8,7 +8,19 @@ var game_state = {},
     shooting_stars = [],
     ship_images,
     map_image,
+    map_pixels,
     flames;
+
+function off_tracks(player) {
+    var pixels, off = false;
+
+    if (map_pixels) {
+        pixels = map_pixels(player.x, player.y);
+        off = Math.max.apply(Math, pixels) === 0;
+    }
+
+    return off;
+}
 
 function setup() {
     flames = loadAnimation('assets/ship-flame-1.png', 'assets/ship-flame-4.png');
@@ -30,12 +42,17 @@ function setup() {
     socket.emit('game:control');
 
     socket.on('game:props', function(_game_props){
+        var context;
         game_props = _game_props;
         map_image = loadImage(game_props.map.map_image);
+        context = map_image.canvas.getContext('2d');
+        map_pixels = function (x, y) {
+            return context.getImageData(x, y, 1, 1).data;
+        };
     });
 
     socket.on('game:state', function(_game_state){
-        console.log('[%s] ships: %s', Date.now(), JSON.stringify(game_state.players, null, '  '));
+        console.info('[%s] ships: %s', Date.now(), JSON.stringify(game_state.players, null, '  '));
         game_state = _game_state;
     });
 
@@ -49,6 +66,15 @@ function setup() {
 
 function draw() {
     background("#101f2e");
+
+    if (game_state.players) {
+        game_state.players.forEach(function (player) {
+            socket.emit('game:player:turn', {
+                player_id: player.id,
+                off_tracks: off_tracks(player)
+            });
+        });
+    }
 
     stars.forEach(function(star) {
         star.update();
