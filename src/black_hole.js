@@ -10,8 +10,14 @@ function BlackHole(x, y) {
 }
 
 BlackHole.prototype.update = function() {
-    image(this.image, this.x, this.y, this.size, this.size);
+    imageMode(CENTER);
+    push();
+    translate(this.x, this.y);
+    scale(this.size/100);
+    image(this.image, 0, 0, 109, 74);
+    pop();
     this.timer--;
+
     if(this.timer < 100) {
         this.size--;
     } else {

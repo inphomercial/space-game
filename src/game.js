@@ -121,7 +121,6 @@ function draw() {
     game_state.players && game_state.players.forEach(function (player) {
         if(!ship_sprites[player.id]){
             ship_sprites[player.id] = createSprite(player.x, player.y, 35, 35);
-            // ship_sprites[player.id].collide(box);
         }
         imageMode(CENTER);
         ship_sprites[player.id].draw = function() {
@@ -139,10 +138,9 @@ function draw() {
                 animation(blue_flames, -21, 0);
             }
             pop();
-            if(ship_sprites[player.id].collide(box)) {
-                player.x = this.position.x;
-                player.y = this.position.y;
-            }
+            ship_sprites[player.id].collide(box);
+            player.x = this.position.x;
+            player.y = this.position.y;
         };
 
         socket.emit('game:player:turn', {
@@ -154,9 +152,17 @@ function draw() {
     })
 
     var ship_ids = [];
+
     if(game_state.players) {
         ship_ids = game_state.players.map(function (d){ return d.id; });
     }
+
+    for(var i = 0 ; i < ship_ids.length - 1; i++) {
+        for(var t = i + 1 ; t < ship_ids.length; t++) {
+            ship_sprites[ship_ids[i]].displace(ship_sprites[ship_ids[t]]);
+        }
+    }
+
     for( var ship_id in ship_sprites) {
         if(ship_sprites.hasOwnProperty(ship_id)){
             if (ship_ids.indexOf(ship_id) === -1){
@@ -186,7 +192,6 @@ function draw() {
             black_holes.splice(index, 1);
         }
     });
-
     draw_game();
 }
 
