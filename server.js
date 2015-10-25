@@ -55,7 +55,7 @@ app.get('/monitor', function (req, res) { res.sendfile('monitor.html'); });
 
 server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); });
 server_socket.on('connection', function (socket) {
-    var player;
+    var player, state_interval;
 
     if (game.canAddPlayer()) {
         player = game.addPlayer(socket);
@@ -102,7 +102,11 @@ server_socket.on('connection', function (socket) {
             }
         });
 
-        setInterval(function () {
+        socket.on('disconnect', function () {
+            clearInterval(state_interval);
+        });
+
+        state_interval = setInterval(function () {
             socket.emit('game:state', game.getState());
         }, 1000 / FPS);
     });

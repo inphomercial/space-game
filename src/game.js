@@ -39,7 +39,9 @@ function setup() {
         'violet' : loadImage('assets/ship-body-10.png')
     }
 
-    socket.emit('game:control');
+    socket.on('connect', function () {
+        socket.emit('game:control');
+    });
 
     socket.on('game:props', function(_game_props){
         var context;
