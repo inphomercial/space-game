@@ -73,18 +73,16 @@ server_socket.on('connection', function (socket) {
 
     socket.on('game:state:ready', function () {
         game.state = GAME_STATE.READY;
-        game.monitors.forEach(function (monitor) {
-            (function countdown(timeleft) {
-                monitor.emit('game:state:startingIn', timeleft);
-                if (timeleft) {
-                    setTimeout(function () {
-                        countdown(--timeleft);
-                    }, 1000);
-                } else {
-                    game.state = GAME_STATE.INPROGRESS;
-                }
-            })(3);
-        });
+        (function countdown(timeleft) {
+            server_socket.sockets.emit('game:state:startingIn', timeleft);
+            if (timeleft) {
+                setTimeout(function () {
+                    countdown(--timeleft);
+                }, 1000);
+            } else {
+                game.state = GAME_STATE.INPROGRESS;
+            }
+        })(3);
     });
 
     if (game.canAddPlayer()) {

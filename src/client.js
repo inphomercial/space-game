@@ -32,6 +32,39 @@ function setup() {
             document.getElementById('start_game').style.opacity = '0';
         };
     });
+
+    socket.on('game:state:startingIn', function (timeleft) {
+        if (timeleft) {
+            message('starting game in ' + timeleft);
+        } else {
+            message('go!');
+            setTimeout(function () {
+                message(false);
+            }, 500);
+        }
+    });
+}
+
+function message(msg) {
+    var notification = document.getElementById('notification'),
+        canvas = document.getElementsByTagName('canvas')[0];
+
+    function style(elem, style, value) {
+        if (!elem) {
+            return;
+        }
+
+        elem.style[style] = value;
+    }
+
+    if (msg === false) {
+        style(notification, 'opacity', '0');
+        style(canvas, 'opacity', '1');
+    } else {
+        notification.innerHTML = msg;
+        style(notification, 'opacity', '1');
+        style(canvas, 'opacity', '.3');
+    }
 }
 
 function windowResized() {
