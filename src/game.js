@@ -22,9 +22,23 @@ function off_tracks(player) {
     return off;
 }
 
+function message(msg) {
+    var notification = document.getElementById('notification');
+
+    if (!notification) {
+        return;
+    }
+
+    if (msg === false) {
+        notification.style.display = 'none';
+    } else {
+        notification.innerText = msg;
+        notification.style.display = 'block';
+    }
+}
+
 function setup() {
     flames = loadAnimation('assets/ship-flame-1.png', 'assets/ship-flame-4.png');
-
 
     ship_images = {
         '#ff0056' : loadImage('assets/ship-body-1.png'),
@@ -41,6 +55,11 @@ function setup() {
 
     socket.on('connect', function () {
         socket.emit('game:control');
+        message(false);
+    });
+
+    socket.on('disconnect', function () {
+        message("disconnected from server. trying to connect...")
     });
 
     socket.on('game:props', function(_game_props){
