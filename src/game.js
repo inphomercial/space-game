@@ -23,17 +23,24 @@ function off_tracks(player) {
 }
 
 function message(msg) {
-    var notification = document.getElementById('notification');
+    var notification = document.getElementById('notification'),
+        canvas = document.getElementsByTagName('canvas')[0];
 
-    if (!notification) {
-        return;
+    function style(elem, style, value) {
+        if (!elem) {
+            return;
+        }
+
+        elem.style[style] = value;
     }
 
     if (msg === false) {
-        notification.style.display = 'none';
+        style(notification, 'opacity', '0');
+        style(canvas, 'opacity', '1');
     } else {
         notification.innerText = msg;
-        notification.style.display = 'block';
+        style(notification, 'opacity', '1');
+        style(canvas, 'opacity', '.3');
     }
 }
 

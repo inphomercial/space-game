@@ -20,21 +20,26 @@
         <script type="text/javascript" src="src/game.js"></script>
 
         <style type="text/css">
+        #notification, canvas {
+            transition: opacity .3s;
+        }
+
         #notification {
             background: #1D1D1D;
             box-shadow: 0 0 6px 2px #292929;
             color: #44C744;
-            display: none;
             font-family: monospace;
             font-size: 70px;
             left: 50%;
             letter-spacing: 7px;
             line-height: 65px;
+            opacity: 0;
             padding: 50px;
             position: absolute;
             text-transform: uppercase;
             top: 50%;
             transform: translateX(-50%) translateY(-50%);
+            z-index: 1;
         }
         </style>
     </head>
