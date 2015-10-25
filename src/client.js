@@ -21,6 +21,17 @@ function setup() {
     socket.on('player:better-luck-next-time', function () {
         alert('better luck next time, kiddo');
     });
+
+    socket.on('player:control', function () {
+        document.getElementById('start_game').style.display = 'block';
+        document.getElementById('start_game').style.opacity = '1';
+
+        document.getElementById('start_game').onclick = function () {
+            socket.emit('game:state:ready');
+            document.getElementById('start_game').style.display = 'none';
+            document.getElementById('start_game').style.opacity = '0';
+        };
+    });
 }
 
 function windowResized() {
@@ -51,11 +62,4 @@ function touchStarted() {
 
 function touchEnded() {
     flame_sound.stop();
-}
-
-function asController() {
-    socket.emit('game:control');
-    socket.on('game:state', function (state) {
-        console.log('game state', state);
-    });
 }

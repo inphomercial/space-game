@@ -9,7 +9,6 @@ var lodash = require('lodash');
  * @constructor
  * @param {Object} props
  */
-
 function PlayerProperties(props) {
     this.id = props.id;
     this.color = props.color;
@@ -68,6 +67,16 @@ Player.prototype.update = function(game) {
  * @param {Map} map
  */
 function Game(map) {
+    /**
+     * @type {GAME_STATE}
+     */
+    this.state;
+
+    /**
+     * @type {Socket[]}
+     */
+    this.monitors = [];
+
     /**
      * tracks available colors
      */
@@ -151,6 +160,7 @@ Game.prototype.canAddPlayer = function () {
 
 Game.prototype.getState = function () {
     return {
+        state: this.state,
         players: lodash.pluck(this.players, 'props')
     };
 };

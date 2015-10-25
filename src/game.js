@@ -40,7 +40,7 @@ function message(msg) {
         style(notification, 'opacity', '0');
         style(canvas, 'opacity', '1');
     } else {
-        notification.innerText = msg;
+        notification.innerHTML = msg;
         style(notification, 'opacity', '1');
         style(canvas, 'opacity', '.3');
     }
@@ -92,8 +92,19 @@ function setup() {
     });
 
     socket.on('game:state', function(_game_state){
-        console.info('[%s] ships: %s', Date.now(), JSON.stringify(game_state.players, null, '  '));
+        console.info('[%s] state: %s', Date.now(), JSON.stringify(game_state, null, '  '));
         game_state = _game_state;
+    });
+
+    socket.on('game:state:startingIn', function (timeleft) {
+        if (timeleft) {
+            message('starting game in ' + timeleft);
+        } else {
+            message('go!');
+            setTimeout(function () {
+                message(false);
+            }, 500);
+        }
     });
 
   socket.emit('display');

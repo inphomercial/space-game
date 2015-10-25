@@ -4,6 +4,9 @@ var FPS = 30;
 var PORT = process.env.PORT || 3000;
 var DEBUG = process.env.DEBUG || process.env.NODE_ENV === 'development';
 
+var GAME_STATE = require('./src/game_state');
+
+var lodash = require('lodash');
 var express = require('express');
 var debug = require('debug');
 var socket_io = require('socket.io');
@@ -25,11 +28,22 @@ var Map = require('./src/map');
 
 var game = new Game(new Map());
 
+function readyPlayerOne(player) {
+    if (!game.state && game.monitors.length && player) {
+        game.state = GAME_STATE.PREGAME;
+        player.socket.emit('player:control');
+    }
+}
+
 function pickOne(primary, backup, property) {
     return property in primary ? primary[property] : backup[property];
 }
 
 function updatePlayer(player, props) {
+    if (game.state !== GAME_STATE.INPROGRESS) {
+        return;
+    }
+
     player.props.boost = pickOne(props, player.props, 'boost');
     player.props.rotation_speed = pickOne(props, player.props, 'rotation_speed');
     player.props.vx = pickOne(props, player.props, 'vx');
@@ -57,6 +71,22 @@ server_http.listen(PORT, function () { log_http('listeninig on port %s', PORT); 
 server_socket.on('connection', function (socket) {
     var player, state_interval;
 
+    socket.on('game:state:ready', function () {
+        game.state = GAME_STATE.READY;
+        game.monitors.forEach(function (monitor) {
+            (function countdown(timeleft) {
+                monitor.emit('game:state:startingIn', timeleft);
+                if (timeleft) {
+                    setTimeout(function () {
+                        countdown(--timeleft);
+                    }, 1000);
+                } else {
+                    game.state = GAME_STATE.INPROGRESS;
+                }
+            })(3);
+        });
+    });
+
     if (game.canAddPlayer()) {
         player = game.addPlayer(socket);
 
@@ -75,17 +105,22 @@ server_socket.on('connection', function (socket) {
         });
 
         socket.emit('player:props', player.props);
+        readyPlayerOne(player);
     } else {
         socket.emit('player:better-luck-next-time');
     }
 
     // this is a monitor
     socket.on('game:control', function () {
+        game.monitors.push(socket);
+
         if (player) {
             game.removePlayer(player);
             player.props = undefined;
             player = undefined;
         }
+
+        readyPlayerOne(game.players[0]);
 
         socket.emit('game:props', {
             map: game.map
@@ -102,8 +137,13 @@ server_socket.on('connection', function (socket) {
             }
         });
 
+        socket.on('game:state:startingIn', function (timeleft) {
+            socket.broadcast.emit('game:state:startingIn', timeleft);
+        });
+
         socket.on('disconnect', function () {
             clearInterval(state_interval);
+            lodash.pull(game.monitors, socket);
         });
 
         state_interval = setInterval(function () {
