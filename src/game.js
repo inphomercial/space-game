@@ -8,6 +8,7 @@ var game_state = {},
     box,
     ship_images,
     map_image,
+    black_hole_image,
     map_pixels,
     blue_flames,
     flames;
@@ -61,6 +62,8 @@ function setup() {
         '#faed22' : loadImage('assets/ship-body-9.png'),
         'violet' : loadImage('assets/ship-body-10.png')
     }
+
+    black_hole_image = loadImage('assets/item-black-hole-1.png');
 
     socket.on('connect', function () {
         socket.emit('game:control');
@@ -140,11 +143,19 @@ function draw() {
         star.update();
     });
 
-    checkForShootingStar();
+    if(canSpawnShootingStar()) spawnShootingStar();
     shooting_stars.forEach(function(shooting_star, index) {
         shooting_star.shoot();
         if (shooting_star.life <= 0) {
             shooting_stars.splice(index, 1);
+        }
+    });
+
+    if(canSpawnBlackHole()) spawnBlackHole();
+    black_holes.forEach(function(hole, index) {
+        hole.update();
+        if (hole.timer <= 0) {
+            black_holes.splice(index, 1);
         }
     });
 

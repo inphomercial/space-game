@@ -3,7 +3,6 @@ var stars = [],
     shooting_stars = [];
 
 function Star(x, y, color, size) {
-    // console.log(color);
     this.x = x;
     this.y = y;
     this.color = color;
@@ -28,11 +27,11 @@ Star.prototype.shoot = function() {
     rect(this.x, this.y, this.size, this.size);
 };
 
-function checkForShootingStar() {
-    if(Math.random() > .99) createShootingStar();
+function canSpawnShootingStar() {
+    return (Math.random() > .99);
 };
 
-function createShootingStar() {
+function spawnShootingStar() {
     var star = new Star(randomWidthPosition(), randomHeightPosition(), randomColor(), random(1, 8));
     star.life = random(20, 150);
     star.end_x = randomWidthPosition();
