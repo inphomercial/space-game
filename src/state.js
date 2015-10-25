@@ -1,5 +1,8 @@
 'use strict';
 
+var MAX_SPEED = 4,
+    MIN_SPEED = .5;
+
 var lodash = require('lodash');
 
 /**
@@ -46,7 +49,7 @@ Player.prototype.update = function(game) {
         this.props.vy *= -1;
     }
 
-    var max_speed = this.props.off_tracks ? 1 : 6;
+    var max_speed = this.props.off_tracks ? MIN_SPEED : MAX_SPEED;
     mag = Math.sqrt(Math.pow(this.props.vx, 2) + Math.pow(this.props.vy, 2));
     // console.log('mag: ', mag);
     if (mag > max_speed) {

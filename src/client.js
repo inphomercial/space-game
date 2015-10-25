@@ -1,5 +1,7 @@
 'use strict';
 
+var ROTATION_DAMPENING = 10;
+
 var socket,
     player_info,
     flame_sound;
@@ -27,7 +29,7 @@ function windowResized() {
 
 function draw() {
     var turn = {
-        rotation_speed: rotationX * -1 * 0.0174533 / 5,
+        rotation_speed: rotationX * -1 * 0.0174533 / ROTATION_DAMPENING,
         boost: touchIsDown || mouseIsPressed
     };
 
