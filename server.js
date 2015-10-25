@@ -15,7 +15,7 @@ var log_http = debug('server:http');
 var log_socket = debug('server:socket');
 
 var app = express();
-var forward_all = wildcard();
+// var forward_all = wildcard();
 
 var server_http = new http.Server(app);
 var server_socket = socket_io(server_http);
@@ -29,7 +29,7 @@ function pickOne(primary, backup, property) {
     return property in primary ? primary[property] : backup[property];
 }
 
-server_socket.use(forward_all);
+// server_socket.use(forward_all);
 app.set('views', __dirname + '/views/');
 app.set('view engine', 'html');
 app.set('view cache', DEBUG);
