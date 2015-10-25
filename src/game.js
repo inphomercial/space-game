@@ -83,6 +83,9 @@ function setup() {
             return context.getImageData(x, y, 1, 1).data;
         };
         box = createSprite(700, 545, 720, 460);
+        box.draw = function () {
+            // draw nothing
+        }
         if(DEBUG){
             box.debug = true;
         }
@@ -108,12 +111,12 @@ function draw() {
         if(!ship_sprites[player.id]){
             ship_sprites[player.id] = createSprite(player.x, player.y, 35, 35);
             // ship_sprites[player.id].collide(box);
-            if(DEBUG){
-                // ship_sprites[player.id].debug = true;
-            }
         }
         imageMode(CENTER);
         ship_sprites[player.id].draw = function() {
+            if(DEBUG){
+                ship_sprites[player.id].debug = true;
+            }
             this.position.x = player.x;
             this.position.y = player.y;
             push();
@@ -194,4 +197,11 @@ function render_map() {
 
     imageMode(CORNER);
     image(map_image,0,0);
+}
+
+function keyPressed() {
+    if (key === 'D') {
+        DEBUG = !DEBUG;
+        console.log('debug: ' + DEBUG);
+    }
 }
